@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+option csharp_namespace = "PatientAPI";
+
+import "google/protobuf/Timestamp.proto";
+import "google/api/annotations.proto";
+
+package patient;
+
+// The greeting service definition.
+service PatientProto {
+	//Create
+rpc CreatePatient(CreatePatientRequest) returns (CreatePatientResponse)
+{
+	option (google.api.http) = {
+		post: "/v1/patient",
+		body: "*"
+	};
+};
+
+// Read Single
+rpc ReadPatient(ReadPatientRequest) returns (ReadPatientResponse)
+{
+	option (google.api.http) = {
+		get: "/v1/patient/{id}"
+	};
+};
+
+// Read List
+rpc GetAllPatient(GetAllPatientRequest) returns (GetAllPatientResponse) 
+{
+	option (google.api.http) = {
+		get: "/v1/patient"
+	};
+};
+
+// Update
+rpc UpdatePatient(UpdatePatientRequest) returns (UpdatePatientResponse)
+{
+	option (google.api.http) = {
+		put: "/v1/patient",
+		body: "*"
+	};
+};
+
+// Delete
+rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse)
+{
+	option (google.api.http) = {
+		delete: "/v1/patient/{id}"
+	};
+};
+
+// Declare deceased
+rpc DeclareDeceasedPatient(DeclareDeceasedPatientRequest) returns (DeclareDeceasedPatientResponse)
+{
+	option (google.api.http) = {
+		put: "/v1/patient",
+		body: "*"
+	};
+};
+
+}
+
+message CreatePatientRequest {
+	string name = 1;
+	string surName = 2;
+	string email_adress = 3;
+	string phone_number = 4;
+	string country = 5;
+	string city = 6;
+	string zip_code = 7;
+	string street = 8;
+	int32 house_number = 9;
+	google.protobuf.Timestamp date_of_birth = 10;
+}
+
+message CreatePatientResponse {
+	int32 id = 1;
+}
+
+message ReadPatientRequest {
+	int32 id = 1;
+}
+
+message ReadPatientResponse {
+	int32 id = 1;
+	string name = 2;
+	string surName = 3;
+	string email_adress = 4;
+	string phone_number = 5;
+	string country = 6;
+	string city = 7;
+	string zip_code = 8;
+	string street = 9;
+	int32 house_number = 10;
+	google.protobuf.Timestamp date_of_birth = 11;
+}
+
+message GetAllPatientRequest {}
+
+message GetAllPatientResponse {
+	repeated ReadPatientResponse patient = 1;
+}
+
+message UpdatePatientRequest {
+	int32 id = 1;
+	string name = 2;
+	string surName = 3;
+	string email_adress = 4;
+	string phone_number = 5;
+	string country = 6;
+	string city = 7;
+	string zip_code = 8;
+	string street = 9;
+	int32 house_number = 10;
+	google.protobuf.Timestamp date_of_birth = 11;
+}
+
+message UpdatePatientResponse {
+	int32 id = 1;
+}
+
+message DeletePatientRequest {
+	int32 id = 1;
+}
+
+message DeletePatientResponse {
+	int32 id = 1;
+}
+
+message DeclareDeceasedPatientRequest {
+	int32 id = 1;
+	google.protobuf.Timestamp date_of_death = 2;
+}
+
+message DeclareDeceasedPatientResponse {
+	int32 id = 1;
+}
