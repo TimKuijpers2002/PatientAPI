@@ -55,7 +55,7 @@ rpc DeletePatient(DeletePatientRequest) returns (DeletePatientResponse)
 rpc DeclareDeceasedPatient(DeclareDeceasedPatientRequest) returns (DeclareDeceasedPatientResponse)
 {
 	option (google.api.http) = {
-		put: "/v1/patient",
+		put: "/v1/deceased",
 		body: "*"
 	};
 };

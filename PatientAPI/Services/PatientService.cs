@@ -1,4 +1,5 @@
-﻿using Google.Type;
+﻿using Google.Protobuf.WellKnownTypes;
+using Google.Type;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
 using PatientAPI.Data;
@@ -35,8 +36,7 @@ namespace PatientAPI.Services
                 ZipCode = request.ZipCode,
                 Street = request.Street,
                 HouseNumber = request.HouseNumber,
-                //DateOfBirth = request.DateOfBirth,
-                //DateOfDeath = request.DateOfDeath,
+                DateOfBirth = request.DateOfBirth.ToDateTime()
             };
 
             await _dbContext.AddAsync(patient);
@@ -70,8 +70,7 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    //DateOfBirth = patient.DateOfBirth,
-                    //DateOfDeath = patient.DateOfDeath,
+                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
                 });
             }
 
@@ -97,9 +96,8 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    //DateOfBirth = patient.DateOfBirth,
-                    //DateOfDeath = patient.DateOfDeath,
-                });
+                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
+                }); ;
             }
 
             return await Task.FromResult(response);
@@ -128,8 +126,7 @@ namespace PatientAPI.Services
             patient.ZipCode = request.ZipCode;
             patient.Street = request.Street;
             patient.HouseNumber = request.HouseNumber;
-            //patient.DateOfBirth = request.DateOfBirth,
-            //patient.DateOfDeath = request.DateOfDeath,
+            patient.DateOfBirth = request.DateOfBirth.ToDateTime();
 
             await _dbContext.SaveChangesAsync();
 
@@ -156,6 +153,30 @@ namespace PatientAPI.Services
             await _dbContext.SaveChangesAsync();
 
             return await Task.FromResult(new DeletePatientResponse
+            {
+                Id = patient.Id
+            });
+        }
+
+        public override async Task<DeclareDeceasedPatientResponse> DeclareDeceasedPatient(DeclareDeceasedPatientRequest request, ServerCallContext context)
+        {
+            if (request.Id <= 0 || request.DateOfDeath == null)
+            {
+                throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
+            }
+            var patient = await _dbContext.Patient.FirstOrDefaultAsync(p => p.Id == request.Id);
+
+            if (patient == null)
+            {
+                throw new RpcException(new Status(StatusCode.NotFound, $"No patient with id {request.Id}"));
+            }
+
+            patient.Id = request.Id;
+            patient.DateOfDeath = request.DateOfDeath.ToDateTime();
+
+            await _dbContext.SaveChangesAsync();
+
+            return await Task.FromResult(new DeclareDeceasedPatientResponse
             {
                 Id = patient.Id
             });

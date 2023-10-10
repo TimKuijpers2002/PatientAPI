@@ -13,6 +13,6 @@
         public string Street { get; set; }
         public int HouseNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
-        public DateTime DateOfDeath { get; set; }
+        public DateTime? DateOfDeath { get; set; }
     }
 }
