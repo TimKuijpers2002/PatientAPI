@@ -158,7 +158,6 @@ namespace PatientAPI.Services
             });
         }
 
-        //Declare a patient as death
         public override async Task<DeclareDeceasedPatientResponse> DeclareDeceasedPatient(DeclareDeceasedPatientRequest request, ServerCallContext context)
         {
             if (request.Id <= 0 || request.DateOfDeath == null)
