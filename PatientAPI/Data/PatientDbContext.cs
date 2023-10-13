@@ -10,6 +10,6 @@ namespace PatientAPI.Data
             
         }
 
-        public DbSet<Patient> Patient => Set<Patient>();
+        public DbSet<Patient> Patients => Set<Patient>();
     }
 }
