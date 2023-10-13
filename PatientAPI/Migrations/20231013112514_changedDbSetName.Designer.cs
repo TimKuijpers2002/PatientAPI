@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatientAPI.Data;
 
@@ -11,9 +12,11 @@ using PatientAPI.Data;
 namespace PatientAPI.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231013112514_changedDbSetName")]
+    partial class changedDbSetName
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

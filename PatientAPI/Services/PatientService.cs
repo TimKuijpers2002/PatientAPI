@@ -54,7 +54,7 @@ namespace PatientAPI.Services
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Resource index must be greater than 0"));
             }
-            var patient = await _dbContext.Patient.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (patient != null)
             {
@@ -80,7 +80,7 @@ namespace PatientAPI.Services
         public override async Task<GetAllPatientResponse> GetAllPatient(GetAllPatientRequest request, ServerCallContext context)
         {
             var response = new GetAllPatientResponse();
-            var patients = await _dbContext.Patient.ToListAsync();
+            var patients = await _dbContext.Patients.ToListAsync();
 
             foreach (var patient in patients)
             {
@@ -109,7 +109,7 @@ namespace PatientAPI.Services
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patient.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (patient == null)
             {
@@ -142,14 +142,14 @@ namespace PatientAPI.Services
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patient.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (patient == null)
             {
                 throw new RpcException(new Status(StatusCode.NotFound, $"No patient with id {request.Id}"));
             }
 
-            _dbContext.Patient.Remove(patient);
+            _dbContext.Patients.Remove(patient);
             await _dbContext.SaveChangesAsync();
 
             return await Task.FromResult(new DeletePatientResponse
@@ -164,7 +164,7 @@ namespace PatientAPI.Services
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patient.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
 
             if (patient == null)
             {
