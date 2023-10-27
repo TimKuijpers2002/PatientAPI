@@ -70,7 +70,7 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
                 });
             }
 
@@ -96,7 +96,7 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
                 }); ;
             }
 
