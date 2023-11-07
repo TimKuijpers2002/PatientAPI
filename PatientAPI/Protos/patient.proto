@@ -76,15 +76,15 @@ message CreatePatientRequest {
 }
 
 message CreatePatientResponse {
-	int32 id = 1;
+	string id = 1;
 }
 
 message ReadPatientRequest {
-	int32 id = 1;
+	string id = 1;
 }
 
 message ReadPatientResponse {
-	int32 id = 1;
+	string id = 1;
 	string name = 2;
 	string surName = 3;
 	string email_adress = 4;
@@ -104,7 +104,7 @@ message GetAllPatientResponse {
 }
 
 message UpdatePatientRequest {
-	int32 id = 1;
+	string id = 1;
 	string name = 2;
 	string surName = 3;
 	string email_adress = 4;
@@ -118,22 +118,22 @@ message UpdatePatientRequest {
 }
 
 message UpdatePatientResponse {
-	int32 id = 1;
+	string id = 1;
 }
 
 message DeletePatientRequest {
-	int32 id = 1;
+	string id = 1;
 }
 
 message DeletePatientResponse {
-	int32 id = 1;
+	string id = 1;
 }
 
 message DeclareDeceasedPatientRequest {
-	int32 id = 1;
+	string id = 1;
 	google.protobuf.Timestamp date_of_death = 2;
 }
 
 message DeclareDeceasedPatientResponse {
-	int32 id = 1;
+	string id = 1;
 }
