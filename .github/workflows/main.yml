@@ -40,11 +40,11 @@ jobs:
         id: set-image-name
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:dev"
+            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:dev"
           elif [[ "${{ github.ref }}" == "refs/heads/accept" ]]; then
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:accept"
+            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:accept"
           else
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:latest"
+            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:latest"
           fi
         shell: bash
 
