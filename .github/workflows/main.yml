@@ -36,21 +36,9 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set Image Name
-        id: set-image-name
-        run: |
-          if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            echo "::set-output name=tag::dev"
-          elif [[ "${{ github.ref }}" == "refs/heads/accept" ]]; then
-            echo "::set-output name=tag::accept"
-          else
-            echo "::set-output name=tag::latest"
-          fi
-        shell: bash
-
       - name: Build and Push Docker Image
         run: |
-          docker buildx build --file Dockerfile -t ${{ steps.set-image-name.outputs.tag }} .
-          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:${{ steps.set-image-name.outputs.tag }}
+          docker buildx build --file Dockerfile -t patientapi:latest .
+          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:latest }}
         env:
           DOCKER_CLI: docker
