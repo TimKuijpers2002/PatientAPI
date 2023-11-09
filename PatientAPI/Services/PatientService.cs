@@ -44,23 +44,23 @@ namespace PatientAPI.Services
 
             return await Task.FromResult(new CreatePatientResponse
             {
-                Id = patient.Id
+                Id = patient.Id.ToString()
             });
         }
 
         public override async Task<ReadPatientResponse> ReadPatient(ReadPatientRequest request, ServerCallContext context)
         {
-            if (request.Id <= 0)
+            if (request.Id == string.Empty)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "Resource index must be greater than 0"));
             }
-            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id.ToString() == request.Id);
 
             if (patient != null)
             {
                 return await Task.FromResult(new ReadPatientResponse
                 {
-                    Id = patient.Id,
+                    Id = patient.Id.ToString(),
                     Name = patient.Name,
                     SurName = patient.SurName,
                     EmailAdress = patient.EmailAdress,
@@ -70,7 +70,7 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
                 });
             }
 
@@ -86,7 +86,7 @@ namespace PatientAPI.Services
             {
                 response.Patient.Add(new ReadPatientResponse
                 {
-                    Id = patient.Id,
+                    Id = patient.Id.ToString(),
                     Name = patient.Name,
                     SurName = patient.SurName,
                     EmailAdress = patient.EmailAdress,
@@ -96,7 +96,7 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToTimestamp()
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
                 }); ;
             }
 
@@ -105,18 +105,18 @@ namespace PatientAPI.Services
 
         public override async Task<UpdatePatientResponse> UpdatePatient(UpdatePatientRequest request, ServerCallContext context)
         {
-            if (request.Id <= 0 || request.Name == string.Empty || request.SurName == string.Empty)
+            if (request.Id == string.Empty || request.Name == string.Empty || request.SurName == string.Empty)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id.ToString() == request.Id);
 
             if (patient == null)
             {
                 throw new RpcException(new Status(StatusCode.NotFound, $"No patient with id {request.Id}"));
             }
 
-            patient.Id = request.Id;
+            patient.Id = Guid.Parse(request.Id);
             patient.Name = request.Name;
             patient.SurName = request.SurName;
             patient.EmailAdress = request.EmailAdress;
@@ -132,17 +132,17 @@ namespace PatientAPI.Services
 
             return await Task.FromResult(new UpdatePatientResponse
             {
-                Id = patient.Id
+                Id = patient.Id.ToString()
             });
         }
 
         public override async Task<DeletePatientResponse> DeletePatient(DeletePatientRequest request, ServerCallContext context)
         {
-            if (request.Id <= 0)
+            if (request.Id == string.Empty)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id.ToString() == request.Id);
 
             if (patient == null)
             {
@@ -154,31 +154,31 @@ namespace PatientAPI.Services
 
             return await Task.FromResult(new DeletePatientResponse
             {
-                Id = patient.Id
+                Id = patient.Id.ToString()
             });
         }
 
         public override async Task<DeclareDeceasedPatientResponse> DeclareDeceasedPatient(DeclareDeceasedPatientRequest request, ServerCallContext context)
         {
-            if (request.Id <= 0 || request.DateOfDeath == null)
+            if (request.Id == string.Empty || request.DateOfDeath == null)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
-            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id == request.Id);
+            var patient = await _dbContext.Patients.FirstOrDefaultAsync(p => p.Id.ToString() == request.Id);
 
             if (patient == null)
             {
                 throw new RpcException(new Status(StatusCode.NotFound, $"No patient with id {request.Id}"));
             }
 
-            patient.Id = request.Id;
+            patient.Id = Guid.Parse(request.Id);
             patient.DateOfDeath = request.DateOfDeath.ToDateTime();
 
             await _dbContext.SaveChangesAsync();
 
             return await Task.FromResult(new DeclareDeceasedPatientResponse
             {
-                Id = patient.Id
+                Id = patient.Id.ToString()
             });
         }
     }
