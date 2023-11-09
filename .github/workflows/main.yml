@@ -54,7 +54,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker buildx build --file Dockerfile -t ${{ steps.set-image-name.outputs.image_name }} .
+          docker buildx build --file ./PatientAPI/Dockerfile -t ${{ steps.set-image-name.outputs.image_name }} .
           docker push ${{ steps.set-image-name.outputs.image_name }}
         env:
           DOCKER_CLI: docker
