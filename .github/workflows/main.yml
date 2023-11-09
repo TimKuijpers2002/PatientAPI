@@ -40,17 +40,17 @@ jobs:
         id: set-image-name
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:dev"
+            echo "::set-output name=tag::dev"
           elif [[ "${{ github.ref }}" == "refs/heads/accept" ]]; then
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:accept"
+            echo "::set-output name=tag::accept"
           else
-            echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patientapi:latest"
+            echo "::set-output name=tag::latest"
           fi
         shell: bash
 
       - name: Build and Push Docker Image
         run: |
           docker buildx build --file Dockerfile -t ${{ steps.set-image-name.outputs.image_name }} .
-          docker push ${{ steps.set-image-name.outputs.image_name }}
+          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:${{ steps.set-image-name.outputs.tag }}
         env:
           DOCKER_CLI: docker
