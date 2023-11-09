@@ -37,8 +37,8 @@ jobs:
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker Image
-        run: |
-          docker buildx build --file Dockerfile -t patientapi:latest .
-          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:latest
-        env:
-          DOCKER_CLI: docker
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:latest
