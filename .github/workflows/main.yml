@@ -45,11 +45,11 @@ jobs:
         run: |
           if [[ "${{ github.ref }}" == "refs/heads/dev" ]]; then
             echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:dev"
-          else if [[ "${{ github.ref }}" == "refs/heads/accept" ]]; then
+          elif [[ "${{ github.ref }}" == "refs/heads/accept" ]]; then
             echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:accept"
           else
             echo "::set-output name=image_name::${{ secrets.DOCKER_USERNAME }}/patient-api:latest"
-          fi;
+          fi
         shell: bash
 
       - name: Build and Push Docker Image
