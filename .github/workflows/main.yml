@@ -39,6 +39,6 @@ jobs:
       - name: Build and Push Docker Image
         run: |
           docker buildx build --file Dockerfile -t patientapi:latest .
-          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:latest }}
+          docker push ${{secrets.DOCKER_USERNAME}}/patientapi:latest
         env:
           DOCKER_CLI: docker
