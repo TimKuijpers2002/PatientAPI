@@ -36,6 +36,13 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Set Environment Variables
+        run: |
+          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_SERVER=${{ secrets.SQL_SERVER }}" >> $GITHUB_ENV
+          echo "SQL_USER=${{ secrets.SQL_USER }}" >> $GITHUB_ENV
+          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> $GITHUB_ENV
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
