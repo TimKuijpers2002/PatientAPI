@@ -26,10 +26,10 @@ app.Run();
 
 static void ReplaceConfigurationPlaceholder(IConfiguration configuration, string key, string secretName)
 {
-    // Replace placeholder with the actual secret value
     var secretValue = Environment.GetEnvironmentVariable(secretName);
     if (!string.IsNullOrEmpty(secretValue))
     {
         configuration[key] = secretValue;
+        Console.WriteLine($"Replaced {key} with value: {secretValue}");
     }
 }
