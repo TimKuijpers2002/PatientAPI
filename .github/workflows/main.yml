@@ -23,25 +23,19 @@ jobs:
       - name: Build
         run: dotnet build ./PatientAPI.sln --configuration Release --no-restore
 
-  publish:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2
-
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@v1
-
-      - name: Login to Docker Hub
-        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Set Environment Variables
         run: |
           echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> $GITHUB_ENV
           echo "SQL_SERVER=${{ secrets.SQL_SERVER }}" >> $GITHUB_ENV
           echo "SQL_USER=${{ secrets.SQL_USER }}" >> $GITHUB_ENV
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Replace Placeholders in appsettings.json
+        run: |
+          sed -i "s|{SQL_DATABASE}|$SQL_DATABASE|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_SERVER}|$SQL_SERVER|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_USER}|$SQL_USER|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_PASSWORD}|$SQL_PASSWORD|g" ./PatientAPI/appsettings.json
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
