@@ -43,23 +43,12 @@ jobs:
           echo "SQL_USER=${{ secrets.SQL_USER }}" >> $GITHUB_ENV
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Debug Output
-        run: |
-          echo "SQL_DATABASE=${SQL_DATABASE}"
-          echo "SQL_SERVER=${SQL_SERVER}"
-          echo "SQL_USER=${SQL_USER}"
-          echo "SQL_PASSWORD=${SQL_PASSWORD}"
-          cat ./PatientAPI/appsettings.json
-
       - name: Replace Placeholders in appsettings.json
         run: |
           sed -i "s|{SQL_DATABASE}|${SQL_DATABASE}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_SERVER}|${SQL_SERVER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
-
-      - name: Debug Output after Replacement
-        run: cat ./PatientAPI/appsettings.json
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
