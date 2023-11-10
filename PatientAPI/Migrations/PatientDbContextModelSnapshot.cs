@@ -3,7 +3,6 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PatientAPI.Data;
 
@@ -12,11 +11,9 @@ using PatientAPI.Data;
 namespace PatientAPI.Migrations
 {
     [DbContext(typeof(PatientDbContext))]
-    [Migration("20231006144001_InitialMigration")]
-    partial class InitialMigration
+    partial class PatientDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -27,11 +24,9 @@ namespace PatientAPI.Migrations
 
             modelBuilder.Entity("PatientAPI.Models.Patient", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .IsRequired()
@@ -44,13 +39,15 @@ namespace PatientAPI.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DateOfDeath")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("EmailAdress")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("HouseNumber")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -66,9 +63,6 @@ namespace PatientAPI.Migrations
                     b.Property<string>("SurName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("TimeOfDeath")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("ZipCode")
                         .IsRequired()
