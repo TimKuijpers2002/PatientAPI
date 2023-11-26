@@ -1,0 +1,32 @@
+﻿apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patient-api-deployment
+  annotations:
+    kubernetes.io/change-cause: "Initial deployment of the app"
+  labels:
+    app: patient-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: patient-api
+  template:
+    metadata:
+      labels:
+        app: patient-api
+        app.kubernetes.io/name: patient-api
+    spec:
+      containers:
+        - name: patient-api
+          image: timsku2002/patientapi:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+          - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 100Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
