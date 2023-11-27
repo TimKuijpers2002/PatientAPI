@@ -86,4 +86,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ github.head_ref }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}
