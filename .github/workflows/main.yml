@@ -75,20 +75,12 @@ jobs:
           sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
 
-      - name: Build and Push Docker Image for master
-        if: github.ref == 'refs/heads/master'
+      - name: debug
+        run: echo "BRANCH=${{ env.BRANCH }}"
+        
+      - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:latest
-          
-      - name: Build and Push Docker Image for other
-        if: github.ref != 'refs/heads/master'
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ env.BRANCH }}
-          build-args: |
-              BRANCH=${{ env.BRANCH }}
