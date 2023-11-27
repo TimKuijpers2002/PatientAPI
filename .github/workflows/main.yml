@@ -11,9 +11,6 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
-
-      - name: Set env branch value
-        run: echo "BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
@@ -89,6 +86,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ env.BRANCH }}
-          build-args: |
-              BRANCH=${{ env.BRANCH }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ github.ref }}
