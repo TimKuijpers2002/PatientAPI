@@ -74,9 +74,6 @@ jobs:
           sed -i "s|{SQL_SERVER}|${SQL_SERVER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
-
-      - name: debug
-        run: echo "BRANCH=${{ env.BRANCH }}"
         
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v4
