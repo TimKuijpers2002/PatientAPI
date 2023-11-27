@@ -72,12 +72,18 @@ jobs:
           sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
           sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
 
-      - name: Build and Push Docker Image
+      - name: Build and Push Docker Image for master
+        if: github.ref == 'refs/heads/master'
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ github.head_ref || 'latest' }}
-
-    # Set latest tag only for the master branch
-    if: github.ref == 'refs/heads/master'
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:latest
+          
+      - name: Build and Push Docker Image for other
+        if: github.ref != 'refs/heads/master'
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:${{ github.head_ref }}
