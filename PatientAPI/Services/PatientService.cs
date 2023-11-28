@@ -14,7 +14,6 @@ namespace PatientAPI.Services
     public class PatientService : PatientProto.PatientProtoBase
     {
         private readonly PatientDbContext _dbContext;
-        // context
         public PatientService(PatientDbContext dbContext)
         {
             _dbContext = dbContext;
