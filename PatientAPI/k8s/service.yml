@@ -3,10 +3,9 @@ kind: Service
 metadata:
   name: patient-api-service
 spec:
-  type: ClusterIP
+  selector:
+    app: patient-api
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
-  selector:
-    app: patient-api
