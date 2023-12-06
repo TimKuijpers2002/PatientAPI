@@ -80,7 +80,6 @@ jobs:
           tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:latest
           
   scan_docker_image:
-    permissions: read-all
     runs-on: ubuntu-latest
     needs: [ publish ]
     steps:
@@ -92,10 +91,12 @@ jobs:
 
       - name: Scan Docker image 🐳
         uses: snyk/actions/docker@master
+        id: docker-image-scan
         continue-on-error: true
         with:
           image: ${{ secrets.DOCKER_USERNAME }}/patientapi:latest
           args: --file=Dockerfile --severity-threshold=low --sarif-file-output=snyk.sarif
+          sarif: false
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
           
