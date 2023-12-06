@@ -1,7 +1,7 @@
 ﻿apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: patient-ingress
+  name: patient-api-ingress
   namespace: default
   annotations:
     nginx.ingress.kubernetes.io/ssl-redirect: "false"
@@ -12,10 +12,10 @@ spec:
   rules:
   - http:
       paths:
-      - path: /movies-service(/|$)(.*)
+      - path: /v1/patient(/|$)(.*)
         pathType: Prefix
         backend:
           service:  
-            name: movies-api-service
+            name: patient-api-service
             port:
               number: 80
