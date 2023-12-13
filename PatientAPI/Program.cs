@@ -13,7 +13,16 @@ builder.Services.AddGrpc().AddJsonTranscoding();
 
 var app = builder.Build();
 
+ApplyMigrations(app);
+
 app.MapGrpcService<PatientService>();
 app.MapGet("/", () => "health check");
 
 app.Run();
+
+static void ApplyMigrations(WebApplication app)
+{
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
+    db.Database.Migrate();
+}
