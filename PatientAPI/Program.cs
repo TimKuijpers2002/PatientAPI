@@ -24,5 +24,5 @@ static void ApplyMigrations(WebApplication app)
 {
     using var scope = app.Services.CreateScope();
     var db = scope.ServiceProvider.GetRequiredService<PatientDbContext>();
-    db.Database.EnsureCreated();
+    db.Database.Migrate();
 }
