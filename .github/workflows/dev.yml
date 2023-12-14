@@ -45,9 +45,9 @@ jobs:
             -Dsonar.organization=${{ secrets.SONAR_ORG }}
             -Dsonar.projectKey=${{ secrets.SONAR_PROJECT }}
 
-  publish:
+  publish_dev:
     runs-on: ubuntu-latest
-    needs: analyse
+    needs: [ analyse ]
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
@@ -58,30 +58,64 @@ jobs:
       - name: Login to Docker Hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Set Environment Variables
+      - name: Set Environment Variables for Dev
         run: |
           echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> $GITHUB_ENV
           echo "SQL_SERVER=${{ secrets.SQL_SERVER }}" >> $GITHUB_ENV
           echo "SQL_USER=${{ secrets.SQL_USER }}" >> $GITHUB_ENV
           echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> $GITHUB_ENV
 
-      - name: Replace Placeholders in appsettings.json
+      - name: Replace Placeholders in appsettings.json for Dev
         run: |
-          sed -i "s|{SQL_DATABASE}|${SQL_DATABASE}|g" ./PatientAPI/appsettings.json
-          sed -i "s|{SQL_SERVER}|${SQL_SERVER}|g" ./PatientAPI/appsettings.json
-          sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
-          sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
-        
-      - name: Build and Push Docker Image
+          sed -i "s|{SQL_DATABASE}|${SQL_DEV_DATABASE}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_SERVER}|${SQL_DEV_SERVER}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_USER}|${SQL_DEV_USER}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_PASSWORD}|${SQL_DEV_PASSWORD}|g" ./PatientAPI/appsettings.json
+
+      - name: Build and Push Docker Image for Dev
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
           tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:dev
 
+  publish_kubernetes:
+    runs-on: ubuntu-latest
+    needs: [ analyse ]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Hub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set Kubernetes Environment Variables
+        run: |
+          echo "SQL_DATABASE=${{ secrets.SQL_KUBERNETESL_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_SERVER=${{ secrets.SQL_KUBERNETES_SERVER }}" >> $GITHUB_ENV
+          echo "SQL_USER=${{ secrets.SQL_KUBERNETES_USER }}" >> $GITHUB_ENV
+          echo "SQL_PASSWORD=${{ secrets.SQL_KUBERNETES_PASSWORD }}" >> $GITHUB_ENV
+
+      - name: Replace Placeholders in appsettings.json for Kubernetes
+        run: |
+          sed -i "s|{SQL_DATABASE}|${SQL_DATABASE}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_SERVER}|${SQL_SERVER}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_USER}|${SQL_USER}|g" ./PatientAPI/appsettings.json
+          sed -i "s|{SQL_PASSWORD}|${SQL_PASSWORD}|g" ./PatientAPI/appsettings.json
+
+      - name: Build and Push Docker Image for Kubernetes
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/patientapi:kubernetes
+
   scan_docker_image:
     runs-on: ubuntu-latest
-    needs: [ publish ]
+    needs: [ publish_dev, publish_kubernetes ]
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
@@ -89,11 +123,20 @@ jobs:
       - name: Log in to the Container registry 📦
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Scan Docker image 🐳
+      - name: Scan Docker image for Dev 🐳
         uses: snyk/actions/docker@master
         continue-on-error: true
         with:
           image: ${{ secrets.DOCKER_USERNAME }}/patientapi:dev
+          args: --file=Dockerfile --severity-threshold=medium
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+
+      - name: Scan Docker image for Kubernetes 🐳
+        uses: snyk/actions/docker@master
+        continue-on-error: true
+        with:
+          image: ${{ secrets.DOCKER_USERNAME }}/patientapi:kubernetes
           args: --file=Dockerfile --severity-threshold=medium
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
