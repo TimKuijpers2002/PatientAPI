@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: patient-api
-          image: timsku2002/patientapi:latest
+          image: timsku2002/patientapi:kubernetes
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 80
