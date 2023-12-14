@@ -60,10 +60,10 @@ jobs:
 
       - name: Set Environment Variables for Dev
         run: |
-          echo "SQL_DATABASE=${{ secrets.SQL_DATABASE }}" >> $GITHUB_ENV
-          echo "SQL_SERVER=${{ secrets.SQL_SERVER }}" >> $GITHUB_ENV
-          echo "SQL_USER=${{ secrets.SQL_USER }}" >> $GITHUB_ENV
-          echo "SQL_PASSWORD=${{ secrets.SQL_PASSWORD }}" >> $GITHUB_ENV
+          echo "SQL_DATABASE=${{ secrets.SQL_DEV_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_SERVER=${{ secrets.SQL_DEV_SERVER }}" >> $GITHUB_ENV
+          echo "SQL_USER=${{ secrets.SQL_DEV_USER }}" >> $GITHUB_ENV
+          echo "SQL_PASSWORD=${{ secrets.SQL_DEV_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Replace Placeholders in appsettings.json for Dev
         run: |
@@ -94,7 +94,7 @@ jobs:
 
       - name: Set Kubernetes Environment Variables
         run: |
-          echo "SQL_DATABASE=${{ secrets.SQL_KUBERNETESL_DATABASE }}" >> $GITHUB_ENV
+          echo "SQL_DATABASE=${{ secrets.SQL_KUBERNETES_DATABASE }}" >> $GITHUB_ENV
           echo "SQL_SERVER=${{ secrets.SQL_KUBERNETES_SERVER }}" >> $GITHUB_ENV
           echo "SQL_USER=${{ secrets.SQL_KUBERNETES_USER }}" >> $GITHUB_ENV
           echo "SQL_PASSWORD=${{ secrets.SQL_KUBERNETES_PASSWORD }}" >> $GITHUB_ENV
