@@ -12,7 +12,7 @@ spec:
   rules:
   - http:
       paths:
-      - path: /v1/patient(/|$)(.*)
+      - path: /v1(/|$)(.*)
         pathType: Prefix
         backend:
           service:  
