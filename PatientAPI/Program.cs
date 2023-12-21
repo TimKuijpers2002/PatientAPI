@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PatientAPI.Data;
 using PatientAPI.Services;
+using Prometheus;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,9 @@ builder.Services.AddDbContext<PatientDbContext>(opt => opt.UseSqlServer(configur
 builder.Services.AddGrpc().AddJsonTranscoding();
 
 var app = builder.Build();
+
+app.UseMetricServer();
+app.UseHttpMetrics();
 
 ApplyMigrations(app);
 
