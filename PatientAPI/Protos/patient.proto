@@ -73,6 +73,7 @@ message CreatePatientRequest {
 	string street = 8;
 	int32 house_number = 9;
 	google.protobuf.Timestamp date_of_birth = 10;
+	bool concent_storage_of_records = 11;
 }
 
 message CreatePatientResponse {
@@ -95,6 +96,7 @@ message ReadPatientResponse {
 	string street = 9;
 	int32 house_number = 10;
 	google.protobuf.Timestamp date_of_birth = 11;
+	bool concent_storage_of_records = 12;
 }
 
 message GetAllPatientRequest {}
@@ -115,6 +117,7 @@ message UpdatePatientRequest {
 	string street = 9;
 	int32 house_number = 10;
 	google.protobuf.Timestamp date_of_birth = 11;
+	bool concent_storage_of_records = 12;
 }
 
 message UpdatePatientResponse {
