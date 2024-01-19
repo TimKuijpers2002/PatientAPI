@@ -2,6 +2,10 @@
 kind: Service
 metadata:
   name: patient-api-service
+  namespace: default
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port:   "80"
 spec:
   selector:
     app: patient-api

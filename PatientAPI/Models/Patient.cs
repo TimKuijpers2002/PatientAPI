@@ -14,5 +14,6 @@
         public int HouseNumber { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime? DateOfDeath { get; set; }
+        public bool ConcentStorageOfRecords { get; set; }
     }
 }

@@ -36,7 +36,8 @@ namespace PatientAPI.Services
                 ZipCode = request.ZipCode,
                 Street = request.Street,
                 HouseNumber = request.HouseNumber,
-                DateOfBirth = request.DateOfBirth.ToDateTime()
+                DateOfBirth = request.DateOfBirth.ToDateTime(),
+                ConcentStorageOfRecords = request.ConcentStorageOfRecords,
             };
 
             await _dbContext.AddAsync(patient);
@@ -70,7 +71,8 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp(),
+                    ConcentStorageOfRecords = patient.ConcentStorageOfRecords
                 });
             }
 
@@ -96,8 +98,9 @@ namespace PatientAPI.Services
                     ZipCode = patient.ZipCode,
                     Street = patient.Street,
                     HouseNumber = patient.HouseNumber,
-                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp()
-                }); ;
+                    DateOfBirth = patient.DateOfBirth.ToUniversalTime().ToTimestamp(),
+                    ConcentStorageOfRecords = patient.ConcentStorageOfRecords
+                });
             }
 
             return await Task.FromResult(response);
@@ -105,7 +108,7 @@ namespace PatientAPI.Services
 
         public override async Task<UpdatePatientResponse> UpdatePatient(UpdatePatientRequest request, ServerCallContext context)
         {
-            if (request.Id == string.Empty || request.Name == string.Empty || request.SurName == string.Empty)
+            if (request.Name == string.Empty || request.SurName == string.Empty)
             {
                 throw new RpcException(new Status(StatusCode.InvalidArgument, "You must provide a valid input"));
             }
@@ -127,6 +130,7 @@ namespace PatientAPI.Services
             patient.Street = request.Street;
             patient.HouseNumber = request.HouseNumber;
             patient.DateOfBirth = request.DateOfBirth.ToDateTime();
+            patient.ConcentStorageOfRecords = request.ConcentStorageOfRecords;
 
             await _dbContext.SaveChangesAsync();
 
